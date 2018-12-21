@@ -200,6 +200,7 @@ void info_insert(GoodList **L) {
 			p->next = *L;
 			*L = p;
 			CurrentCnt++;
+			printf("插入成功！\n\n");
 			break;
 		}
 		
@@ -212,13 +213,17 @@ void info_insert(GoodList **L) {
 				p->next = NULL;//尾插法 
 			}
 			CurrentCnt++;
+			printf("插入成功！\n\n");
 			break;
 		}
 		
 		case 3:{
 			char ID[MAX_ID_LEN];
 			info_change_NoRepeat(p, *L);
+			OutputAll(*L);
+			printf("数据库已显示\n");
 			printf("请输入要将该信息插入到哪个ID后面：");
+			
 			scanf("%s",ID);
 			
 			GoodList *now;
@@ -231,6 +236,7 @@ void info_insert(GoodList **L) {
 			p->next = now->next;
 			now->next = p;
 			
+			printf("插入成功！\n\n");
 			CurrentCnt++;
 			break;
 		}
