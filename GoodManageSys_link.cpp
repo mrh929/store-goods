@@ -45,7 +45,7 @@ void pause(){
 }
 
 bool check_nullfile(){//检查商品文件是否存在或者是否为空
-	if(file_read()) return 0;//找到文件 
+	if(file_read() && fgetc(fp) != EOF) return 0;//找到文件 
 	else{
 		file_write(); file_close();
 		file_read();
@@ -102,10 +102,11 @@ void info_init(GoodList **L){//读取商品文件goodinfo.txt的内容,并建立链表L
 	CurrentCnt=0;
 	
 	if(check_nullfile())//检查是否为空 
-		printf("商品文件不存在，已新建\n");
+		printf("商品文件不存在或为空，已新建\n");
 	else{
 		GoodList *p, *now = NULL;
 		while (!feof(fp)){//一直循环直到把文件读完
+			if(feof(fp)) break;
 			p = (GoodList*) malloc(sizeof(GoodList));
 			if(*L == NULL){//如果p是第一个非空节点 
 				*L = p;
