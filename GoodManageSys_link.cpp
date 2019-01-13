@@ -106,7 +106,6 @@ void info_init(GoodList **L){//读取商品文件goodinfo.txt的内容,并建立链表L
 	else{
 		GoodList *p, *now = NULL;
 		while (!feof(fp)){//一直循环直到把文件读完
-			if(feof(fp)) break;
 			p = (GoodList*) malloc(sizeof(GoodList));
 			if(*L == NULL){//如果p是第一个非空节点 
 				*L = p;
