@@ -36,11 +36,11 @@ void file_write(){
 }
 
 void file_close(){
-	fclose(fp);	
+	fclose(fp);	//关闭文件 
 }
 
 void pause(){
-	system("pause");
+	system("pause");//暂停，请按任意键继续 
 	system("cls");
 }
 
@@ -56,14 +56,14 @@ bool check_nullfile(){//检查商品文件是否存在或者是否为空
 //--------------------------------------------------------------------
 //查找一条商品记录
 //--------------------------------------------------------------------
-GoodList* good_find(GoodList *L,char *p){
+GoodList* good_find(GoodList *L,char *p){//寻找某个商品信息，并且返回该商品的指针 
 	while(L)
 		if(strcmp(L->data.good_id, p) == 0) return L;
 		else L = L->next;
 	return NULL;//没找到 
 }
 
-void info_change(GoodList *L) {
+void info_change(GoodList *L) {//更改商品信息 
 	printf("请输入新的商品信息：\n");
 	printf("商品ID："); scanf("%s",L->data.good_id);
 	printf("商品名称："); scanf("%s",L->data.good_name);
@@ -74,8 +74,8 @@ void info_change(GoodList *L) {
 	return;
 }
 
-void info_change_NoRepeat(GoodList *p,GoodList *L) {//p为新增的指针 ， L为链表的头指针 
-	printf("请输入新的商品信息：\n");
+void info_change_NoRepeat(GoodList *p,GoodList *L) {//更改商品信息，不允许重复 
+	printf("请输入新的商品信息：\n");//p为新增的指针 ， L为链表的头指针 
 	printf("商品ID："); scanf("%s",p->data.good_id);
 	while(good_find(L,p->data.good_id) != NULL){
 		printf("商品ID已存在，请重新输入：\n");
@@ -104,7 +104,7 @@ void info_init(GoodList **L){//读取商品文件goodinfo.txt的内容,并建立链表L
 	if(check_nullfile())//检查是否为空 
 		printf("商品文件不存在，已新建\n");
 	else{
-		GoodList *p, *now;
+		GoodList *p, *now = NULL;
 		while (!feof(fp)){//一直循环直到把文件读完
 			p = (GoodList*) malloc(sizeof(GoodList));
 			if(*L == NULL){//如果p是第一个非空节点 
@@ -123,7 +123,8 @@ void info_init(GoodList **L){//读取商品文件goodinfo.txt的内容,并建立链表L
 	    	fscanf(fp, "%d", &(p->data.good_remain));
 	    	CurrentCnt++;
 	    }
-		now->next = NULL;//把尾节点中的指针置0 
+		if(now != NULL)	now->next = NULL;//把尾节点中的指针置0 
+		
 	}
 	file_close();
 }
@@ -162,6 +163,10 @@ void DelAll(GoodList **L){//删除商品文件以及商品链表中的所有信息
 //将当前商品链表中的内容存入商品文件goodinfo.txt，存盘后销毁链表L
 //--------------------------------------------------------------------
 void info_flush(GoodList **L){
+	if(*L == NULL){
+		remove("goodinfo.txt");//重写文件
+		return;//如果链表为空，就直接删除文件 
+	}
 	file_write();
 	GoodList *p = *L, *now;
 	while(p != NULL){//free指针
@@ -182,7 +187,7 @@ void OutputAll(GoodList *L){//在屏幕上输出所有商品信息
 	}
 }
 
-void info_insert(GoodList **L) {
+void info_insert(GoodList **L) {//插入函数 
 	GoodList *p = (GoodList*) malloc(sizeof(GoodList));
 	GoodList *now = *L;
 	
@@ -217,7 +222,7 @@ void info_insert(GoodList **L) {
 			break;
 		}
 		
-		case 3:{
+		case 3:{//选择位置插入 
 			char ID[MAX_ID_LEN];
 			info_change_NoRepeat(p, *L);
 			OutputAll(*L);
@@ -306,9 +311,9 @@ void good_swap(GoodList* a,GoodList* b){//交换两个商品的位置
 	return;
 }
 
-void bubble_sort(GoodList **L){
+void bubble_sort(GoodList **L){//冒泡排序 
     printf("正在冒泡排序...\n");
-    for(int i=1;i<=CurrentCnt-1;i++){
+    for(int i=1;i<=CurrentCnt-1;i++){//一共有CurrentCnt个元素，要冒泡n-1次 
     	GoodList* now = *L;
     	while(now->next != NULL){
     		if(now->data.good_price > now->next->data.good_price)
